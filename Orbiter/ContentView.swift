@@ -8,51 +8,49 @@
 import SwiftUI
 import Combine
 
-let orbitLength: Double = 380
-let fullCircleDuration: Double = 4.5
+private let orbitLength: Double = 380
+private let fullCircleDuration: Double = 4.5
 
 struct ContentView: View {
-    @State var startAnimation: Bool = false
-    @StateObject var flipFlop = FlipFlop(interval: fullCircleDuration / 2)
-    
-    var orbitAnimation : Animation {
-        .timingCurve(0.333, -orbitLength, 0.666, orbitLength, duration: fullCircleDuration)
-    }
+    @State private var startAnimation: Bool = false
+    @StateObject private var flipFlop = FlipFlop(interval: fullCircleDuration / 2)
     
     var body: some View {
-        VStack {
-            ZStack {
-                Stars().ignoresSafeArea()
-                Text("🌕")
-                    .font(.system(size: 120))
-                    .overlay(
-                        Circle()
-                            .padding(EdgeInsets(top: 5, leading: 4, bottom: 4, trailing: 6))
-                            .font(.system(size: 100))
-                            .foregroundColor(.black)
-                            .opacity(flipFlop.value ? 0 : 0.6)
-                            .animation(.easeInOut(duration: fullCircleDuration / 2))
-                    )
-                    .zIndex(flipFlop.value ? 0 : 1)
-                
-                Text("🪐")
-                    .rotationEffect(Angle.degrees(110))
-                    .font(.system(size: 40))
-                    .foregroundColor(.yellow)
-                    .offset(
-                        x: startAnimation ? 1: 0,
-                        y: startAnimation ? -0.3 : 0
-                    )
+        ZStack {
+            GeometryReader { proxy in
+                Stars(availableSize: proxy.size)
             }
-            .animation(orbitAnimation.repeatForever(autoreverses: false), value: startAnimation)
+            Text("🌕")
+                .font(.system(size: 120))
+                .overlay(
+                    Circle()
+                        .padding(EdgeInsets(top: 5, leading: 4, bottom: 4, trailing: 6))
+                        .font(.system(size: 100))
+                        .foregroundColor(.black)
+                        .opacity(flipFlop.value ? 0 : 0.6)
+                        .animation(.easeInOut(duration: fullCircleDuration / 2))
+                )
+                .zIndex(flipFlop.value ? 0 : 1)
             
-        }.onAppear(perform: {
+            Text("🪐")
+                .rotationEffect(Angle.degrees(110))
+                .font(.system(size: 40))
+                .foregroundColor(.yellow)
+                .offset(
+                    x: startAnimation ? 1: 0,
+                    y: startAnimation ? -0.3 : 0
+                )
+        }
+        .animation(.orbitAnimation.repeatForever(autoreverses: false), value: startAnimation)
+        .ignoresSafeArea()
+        .onAppear {
             startAnimation.toggle()
-        })
+        }
     }
 }
 
-class FlipFlop: ObservableObject {
+/// Toggle and publish a Boolean value at a given frequency
+private class FlipFlop: ObservableObject {
     @Published var value: Bool = false
     private var cancellables = Set<AnyCancellable>()
     
@@ -64,6 +62,12 @@ class FlipFlop: ObservableObject {
                 self?.value.toggle()
             })
             .store(in: &cancellables)
+    }
+}
+
+private extension Animation {
+    static var orbitAnimation : Animation {
+        .timingCurve(0.333, -orbitLength, 0.666, orbitLength, duration: fullCircleDuration)
     }
 }
 
