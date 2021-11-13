@@ -8,13 +8,12 @@
 import SwiftUI
 import Combine
 
-let orbitLength: Double = 500
-let fullCircleDuration: Double = 6
+let orbitLength: Double = 380
+let fullCircleDuration: Double = 4.5
 
 struct ContentView: View {
     @State var startAnimation: Bool = false
     @StateObject var flipFlop = FlipFlop(interval: fullCircleDuration / 2)
-    
     
     var orbitAnimation : Animation {
         .timingCurve(0.333, -orbitLength, 0.666, orbitLength, duration: fullCircleDuration)
@@ -23,16 +22,16 @@ struct ContentView: View {
     var body: some View {
         VStack {
             ZStack {
-                Rectangle().foregroundColor(.black).opacity(0.8).ignoresSafeArea()
+                Stars().ignoresSafeArea()
                 Text("🌕")
-                    .font(.system(size: 100))
+                    .font(.system(size: 120))
                     .overlay(
                         Circle()
                             .padding(EdgeInsets(top: 5, leading: 4, bottom: 4, trailing: 6))
                             .font(.system(size: 100))
                             .foregroundColor(.black)
                             .opacity(flipFlop.value ? 0 : 0.6)
-                            .animation(.easeInOut(duration: fullCircleDuration / 4))
+                            .animation(.easeInOut(duration: fullCircleDuration / 2))
                     )
                     .zIndex(flipFlop.value ? 0 : 1)
                 
