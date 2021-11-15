@@ -1,6 +1,6 @@
 # Orbital-SwiftUI-Animation
 
-An experiment for using SwiftUI's [custom timing Animation](https://developer.apple.com/documentation/swiftui/animation/timingcurve(_:_:_:_:duration:)) to create an orbital-like animaiton.
+An experiment for using SwiftUI's [custom timing Animation](https://developer.apple.com/documentation/swiftui/animation/timingcurve(_:_:_:_:duration:)) to create an orbital-like animation.
 
 ## How it looks:
 
