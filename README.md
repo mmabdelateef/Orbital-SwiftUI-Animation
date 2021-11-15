@@ -18,5 +18,5 @@ An experiment for using SwiftUI's [custom timing Animation](https://developer.ap
 
 - The moon light is a black overlayed circle over the moon that gets it's opacity periodically aniamted between 0 and 0.6 
 
-- The stars are just a particle effect created using a `CAEmiterLayer`, emitter code is basically from this ![SO answer][https://stackoverflow.com/a/61711171/3846724]
+- The stars are just a particle effect created using a `CAEmiterLayer`, emitter code is basically from this [SO answer](https://stackoverflow.com/a/61711171/3846724)
 
